@@ -1,0 +1,854 @@
+[
+    {
+        "id": "647bda8d.b0c114",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "57803997.729b",
+        "type": "ui_template",
+        "z": "647bda8d.b0c114",
+        "group": "7f561e3.c644f6",
+        "name": "",
+        "order": 0,
+        "width": "11",
+        "height": "15",
+        "format": "<html>\n<!--div style=\"color: green\">{{msg.payload}}</div-->\n<canvas id=\"mc\" width=\"500\" height=\"700\"\n style=\"border:14px solid #ce9f07\"></canvas>\n <script type=\"text/javascript\">\n var x=1;\n var myfoo;\n var canvas = document.getElementById('mc');\n // 取得在canvas上繪圖的CanvasRenderingContext2D物件\n var ctx = canvas.getContext('2d');\n var x_side;\n var y_side;\n var x_side_before;\n var y_side_before;\n function myFunction()\n {\n console.log(myfoo);\n }\n (function(scope) {\n // watch msg object from Node-RED\n scope.$watch('msg', function(msg) {\n // new message received\n x_side = msg.payload.x_;\n y_side = msg.payload.y_;\n console.log(x_side);\n console.log(y_side);\n });\n })(scope);\n var draw = function(compositeOper)\n {\n // 保存當前的繪圖狀態\n ctx.beginPath();\n ctx.rect(0, 0, 500, 700);\n ctx.fillStyle = \"#f1cf71\";\n ctx.fill();\n // Stroked triangle\n ctx.beginPath();\n ctx.lineWidth=50;\n ctx.moveTo(150, 100);\n ctx.lineTo (150,600);\n ctx.strokeStyle = \"#ffffff\";\n ctx.stroke();\n \n ctx.beginPath();\n ctx.lineWidth=50;\n ctx.moveTo(350, 100);\n ctx.lineTo (350,600);\n ctx.strokeStyle = \"#ffffff\";\n ctx.stroke();\n }\n draw(\"source-over\");\n \n var draw1 = function(compositeOper)\n {\n //console.log(x);\n //myFunction(myfoo);\n if(x==1)\n {\n ctx.beginPath();\n ctx.arc(x_side,y_side,5,0,2*Math.PI);\n /*ctx.fillStyle = \"red\";\n ctx.fill();*/\n ctx.strokeStyle = \"red\";\n ctx.stroke();\n x+=1;\n return setTimeout(draw1, 1000);\n }\n else\n {\n if((x_side_before!=x_side)||(y_side_before!=y_side))\n { \n ctx.beginPath();\n ctx.arc(x_side_before,y_side_before,7,0,2*Math.PI);\n /*ctx.fillStyle = \"f1cf71\";\n ctx.fill();*/\n ctx.strokeStyle = \"#f1cf71\";\n ctx.stroke();\n x_side_before=x_side;\n y_side_before=y_side;\n }\n else\n {\n ctx.beginPath();\n ctx.arc(x_side,y_side,7,0,2*Math.PI);\n /*ctx.fillStyle = \"f1cf71\";\n ctx.fill();*/\n ctx.strokeStyle = \"#f1cf71\";\n ctx.stroke();\n }\n x=1;\n return setTimeout(draw1, 1000);\n }\n }\n draw1(\"source-over\");\n </script>\n\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "templateScope": "local",
+        "x": 695.5000228881836,
+        "y": 478.1999845504761,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "af78c51c.08afb8",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var x_=global.get(\"X\");\nvar y_=global.get(\"Y\");\n/*var x_=250;\nvar y_=625;*/\nmsg.payload={\"x_\":x_,\"y_\":y_};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 465.20003509521484,
+        "y": 396.3999357223511,
+        "wires": [
+            [
+                "57803997.729b",
+                "2d3f45ef.a1201a"
+            ]
+        ]
+    },
+    {
+        "id": "89912c02.7b685",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "x": 221.50000762939453,
+        "y": 396.7999601364136,
+        "wires": [
+            [
+                "af78c51c.08afb8"
+            ]
+        ]
+    },
+    {
+        "id": "c34e4fff.19fe88",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_r",
+        "qos": "2",
+        "broker": "50973ef8.fa9f1",
+        "x": 322.5,
+        "y": 670.1999206542969,
+        "wires": [
+            [
+                "340a1e3a.9c4ef2"
+            ]
+        ]
+    },
+    {
+        "id": "3be5c1fe.61c276",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_l",
+        "qos": "2",
+        "broker": "50973ef8.fa9f1",
+        "x": 331.5,
+        "y": 600.1999206542969,
+        "wires": [
+            [
+                "729f73ab.de6d7c"
+            ]
+        ]
+    },
+    {
+        "id": "729f73ab.de6d7c",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "/*while (msg.topic== \"data_l\")\n{\n global.set(\"wall_l\",msg.payload);\n break; \n}*/\n/*var data_r=global.get(\"data_r\");\nvar data0=global.get(\"data0\");\nmsg.payload={\"data_l\":data_l,\"data_r\":data_r,\"data0\":data0};\n*/\n/*var msg1={\n \"data_1\":msg.payload\n};\nmsg.payload=msg1;\n*/\nvar x,y;\nx=msg.payload;\ny=parseInt(x);\nmsg.payload=y;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 539.5,
+        "y": 609.5999755859375,
+        "wires": [
+            [
+                "4c0f730e.7ea68c",
+                "9de50476.f68808"
+            ]
+        ]
+    },
+    {
+        "id": "340a1e3a.9c4ef2",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "/*while (msg.topic== \"data_r\")\n{\n global.set(\"wall_r\",msg.payload);\n break;\n}*/\n//global.set(\"data_r\",msg.payload);\n//return msg;\n/*var msg1={\n \"data_r\":msg.payload\n};\nmsg.payload=msg1;\n*/\nvar x,y;\nx=msg.payload;\ny=parseInt(x);\nmsg.payload=y;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 539.5,
+        "y": 671.5999755859375,
+        "wires": [
+            [
+                "b8a606f7.2e5ee",
+                "4c0f730e.7ea68c"
+            ]
+        ]
+    },
+    {
+        "id": "965b2fdb.d8d6f",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "/*while (msg.topic== \"data0\")\n{\n global.set(\"car\",msg.payload);\n break;\n}*/\n/*var msg1={\n \"data0\":msg.payload\n};\nmsg.payload=msg1;\n*/\nvar x,y;\nx=msg.payload;\ny=parseInt(x);\nmsg.payload=y;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 547.5,
+        "y": 751.599853515625,
+        "wires": [
+            [
+                "60a38cf1.413164",
+                "4c0f730e.7ea68c"
+            ]
+        ]
+    },
+    {
+        "id": "3ccf1ffb.c5aa8",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_0",
+        "qos": "2",
+        "broker": "50973ef8.fa9f1",
+        "x": 318.20001220703125,
+        "y": 744.199951171875,
+        "wires": [
+            [
+                "965b2fdb.d8d6f"
+            ]
+        ]
+    },
+    {
+        "id": "b2c66ccb.e7c7e",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var wall_l = msg.payload.data_l;\nvar wall_r = msg.payload.data_r;\nvar car =msg.payload.data_0;\nvar car_b = msg.payload.car_b;\nvar x,y;\n//car=parseInt(car);\n//var car_b=global.get(\"car_b\");\n//msg.payload={\"car_b\":car_b,\"car\":car};\n//global.set(\"car_b\",130);\n//global.set(\"X\",250);\n//global.set(\"Y\",625);\n//msg.payload={\"x\":wall_l,\"y\":wall_r};\n//msg.payload={\"car\":car};\n/*if((wall_l>=100)&&(wall_r>=100))\n{*/\n     while(((car_b-car)<30)&&(car_b>car))\n     {\n        // msg.payload={\"x\":123323333};\n         y=((car-4)/126*550)+75;\n         global.set(\"Y\",y);\n         car_b=car;\n         global.set(\"car_b\",car_b);\n     }\n//}\n/*\nelse\n{\n if(wall_r<wall_l)\n {\n x=((wall_r-1)/106*370)+65;\n global.set(\"X\",x);\n global.set(\"car_b\",130);\n}\n else if(wall_r>wall_l)\n {\n x=((wall_l-1)/106*370)+65;\n global.set(\"X\",x);\n  global.set(\"car_b\",130);\n }\n}*/\n /*global.set(\"X\",x);\n global.set(\"Y\",y);*/\n\n\n//msg.payload={\"A\":wall_l,\"B\":wall_r,\"C\":car};\n//msg.payload={\"x\":x,\"y\":y};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1006.5,
+        "y": 560.5999145507812,
+        "wires": [
+            [
+                "11accda8.c6093a"
+            ]
+        ]
+    },
+    {
+        "id": "11accda8.c6093a",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 1180.1999816894531,
+        "y": 557.6000366210938,
+        "wires": []
+    },
+    {
+        "id": "e133cc3.1bdba3",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 1080.1998901367188,
+        "y": 721.5999755859375,
+        "wires": []
+    },
+    {
+        "id": "4c0f730e.7ea68c",
+        "type": "join",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "timeout": "",
+        "count": "4",
+        "x": 877.5,
+        "y": 664.8000793457031,
+        "wires": [
+            [
+                "e133cc3.1bdba3",
+                "b2c66ccb.e7c7e"
+            ]
+        ]
+    },
+    {
+        "id": "9de50476.f68808",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 710.4999847412109,
+        "y": 591.3999938964844,
+        "wires": []
+    },
+    {
+        "id": "b8a606f7.2e5ee",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 713.4000244140625,
+        "y": 680.0000305175781,
+        "wires": []
+    },
+    {
+        "id": "60a38cf1.413164",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 729.4000244140625,
+        "y": 755.0000305175781,
+        "wires": []
+    },
+    {
+        "id": "2bc96955.08299e",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "car_b",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "x": 352.5000305175781,
+        "y": 813,
+        "wires": [
+            [
+                "44aebba0.9fd254"
+            ]
+        ]
+    },
+    {
+        "id": "44aebba0.9fd254",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var car_b=global.get(\"car_b\");\nmsg.payload=car_b;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 569.5,
+        "y": 813.6000366210938,
+        "wires": [
+            [
+                "4c0f730e.7ea68c",
+                "f1246b97.22b6d"
+            ]
+        ]
+    },
+    {
+        "id": "f1246b97.22b6d",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 816.5000305175781,
+        "y": 1031.7999267578125,
+        "wires": []
+    },
+    {
+        "id": "74de319a.631cb8",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 137.50000190734863,
+        "y": 874.7998914718628,
+        "wires": [
+            [
+                "47e0c03d.8b116"
+            ]
+        ]
+    },
+    {
+        "id": "442a4a52.10da84",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 137.20000076293945,
+        "y": 958.9998941421509,
+        "wires": [
+            [
+                "f23e48e9.584698"
+            ]
+        ]
+    },
+    {
+        "id": "1a598598.dfcd02",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "x": 131.1999969482422,
+        "y": 1032.9999570846558,
+        "wires": [
+            [
+                "8e4da123.dc90d"
+            ]
+        ]
+    },
+    {
+        "id": "f0fed9ad.ec2c",
+        "type": "mqtt out",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_l",
+        "qos": "",
+        "retain": "",
+        "broker": "50973ef8.fa9f1",
+        "x": 473.5,
+        "y": 878.3999176025391,
+        "wires": []
+    },
+    {
+        "id": "a31edbf.8caaea8",
+        "type": "mqtt out",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_r",
+        "qos": "",
+        "retain": "",
+        "broker": "50973ef8.fa9f1",
+        "x": 470.2000274658203,
+        "y": 971.5999755859375,
+        "wires": []
+    },
+    {
+        "id": "6eababb1.74f9f4",
+        "type": "mqtt out",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_0",
+        "qos": "",
+        "retain": "",
+        "broker": "50973ef8.fa9f1",
+        "x": 466.2000274658203,
+        "y": 1046.5999755859375,
+        "wires": []
+    },
+    {
+        "id": "47e0c03d.8b116",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var x = Math.round(Math.random()*10);\nmsg.payload=x+101;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 286.5,
+        "y": 874.9998931884766,
+        "wires": [
+            [
+                "f0fed9ad.ec2c"
+            ]
+        ]
+    },
+    {
+        "id": "f23e48e9.584698",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var x = Math.round(Math.random()*10);\nmsg.payload=x+101;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 297.20001220703125,
+        "y": 955.5999908447266,
+        "wires": [
+            [
+                "a31edbf.8caaea8"
+            ]
+        ]
+    },
+    {
+        "id": "8e4da123.dc90d",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var x = Math.round(Math.random()*10);\n//var car_b=global.get(\"car_b\");\n//msg.payload=x+parseInt(car_b)-10;\nmsg.payload=x+60;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 291.20001220703125,
+        "y": 1032.5999908447266,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "65df3219.83852c",
+        "type": "http in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "url": "/cback",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 258.0000114440918,
+        "y": 214.80001831054688,
+        "wires": [
+            [
+                "799aa975.6157c8",
+                "3d146390.85ca0c",
+                "3bb641ba.08e83e"
+            ]
+        ]
+    },
+    {
+        "id": "799aa975.6157c8",
+        "type": "http response",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "x": 441.0000648498535,
+        "y": 267.8000316619873,
+        "wires": []
+    },
+    {
+        "id": "3d146390.85ca0c",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var a = msg.payload;\nif(a.test=='1')\n {\n msg.payload='C'; \n }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 540.0000114440918,
+        "y": 163.40005493164062,
+        "wires": [
+            [
+                "321f511c.dca4ee",
+                "552022df.812b2c"
+            ]
+        ]
+    },
+    {
+        "id": "3bb641ba.08e83e",
+        "type": "function",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "func": "var date = new Date();\nvar year = date.getFullYear();\nvar month = date.getMonth()+1;\nvar day = date.getDate();\nvar hour = date.getHours()+8;\nvar min = date.getMinutes();\nvar temp;\n\nif(min<10)\n {\n min=\"0\"+min;\n }\n\ntemp=year.toString()+\"/\"+month.toString()+\"/\"+day.toString()+\" \"+hour.toString()+\":\"+min.toString();\nmsg.payload=temp;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 529.7000160217285,
+        "y": 71.0000171661377,
+        "wires": [
+            [
+                "a912647c.86a038",
+                "779e3ea5.d93b7"
+            ]
+        ]
+    },
+    {
+        "id": "85edb6b9.6b60a8",
+        "type": "inject",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 296.1000061035156,
+        "y": 39,
+        "wires": [
+            [
+                "3bb641ba.08e83e"
+            ]
+        ]
+    },
+    {
+        "id": "2d3f45ef.a1201a",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 690.5000076293945,
+        "y": 385.39995098114014,
+        "wires": []
+    },
+    {
+        "id": "321f511c.dca4ee",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 845.0000686645508,
+        "y": 155.6000518798828,
+        "wires": []
+    },
+    {
+        "id": "552022df.812b2c",
+        "type": "mqtt out",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "testtopic/7697/01",
+        "qos": "",
+        "retain": "",
+        "broker": "95f6dc96.7761b",
+        "x": 883.0000228881836,
+        "y": 207.2000560760498,
+        "wires": []
+    },
+    {
+        "id": "a912647c.86a038",
+        "type": "debug",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 752.7000198364258,
+        "y": 35.00000047683716,
+        "wires": []
+    },
+    {
+        "id": "a463f827.1bada8",
+        "type": "ui_button",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "group": "e9c3c0ab.79589",
+        "order": 0,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "Room A",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "A",
+        "payloadType": "str",
+        "topic": "",
+        "x": 628.1001167297363,
+        "y": 257.60000801086426,
+        "wires": [
+            [
+                "552022df.812b2c"
+            ]
+        ]
+    },
+    {
+        "id": "8d21aade.525578",
+        "type": "ui_button",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "group": "e9c3c0ab.79589",
+        "order": 0,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "Room B",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "B",
+        "payloadType": "str",
+        "topic": "",
+        "x": 631,
+        "y": 307,
+        "wires": [
+            [
+                "552022df.812b2c"
+            ]
+        ]
+    },
+    {
+        "id": "779e3ea5.d93b7",
+        "type": "ui_text",
+        "z": "647bda8d.b0c114",
+        "group": "e9c3c0ab.79589",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "time:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 776.1000823974609,
+        "y": 100.60001564025879,
+        "wires": []
+    },
+    {
+        "id": "4484e38d.dd3c1c",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data1",
+        "qos": "2",
+        "broker": "95f6dc96.7761b",
+        "x": 369.1000061035156,
+        "y": 1166.4000244140625,
+        "wires": [
+            [
+                "aaa433f6.73bb6"
+            ]
+        ]
+    },
+    {
+        "id": "4fdab4ab.d3184c",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data2",
+        "qos": "2",
+        "broker": "95f6dc96.7761b",
+        "x": 376,
+        "y": 1253.4000244140625,
+        "wires": [
+            [
+                "f10b1019.2eca"
+            ]
+        ]
+    },
+    {
+        "id": "54a78b32.122af4",
+        "type": "ui_chart",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "group": "8312a1ab.03b48",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart0",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 600.1000671386719,
+        "y": 1118.0000591278076,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "67bd19d.ac299e8",
+        "type": "mqtt in",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "topic": "data_0",
+        "qos": "2",
+        "broker": "50973ef8.fa9f1",
+        "x": 376,
+        "y": 1104.4000244140625,
+        "wires": [
+            [
+                "54a78b32.122af4"
+            ]
+        ]
+    },
+    {
+        "id": "aaa433f6.73bb6",
+        "type": "ui_chart",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "group": "e5916d97.c521f",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart1",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 608,
+        "y": 1184.4000244140625,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "f10b1019.2eca",
+        "type": "ui_chart",
+        "z": "647bda8d.b0c114",
+        "name": "",
+        "group": "f54df0a8.6058d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart2",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "10",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 603,
+        "y": 1257.4000244140625,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "50973ef8.fa9f1",
+        "type": "mqtt-broker",
+        "z": "",
+        "broker": "broker.mqttdashboard.com",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    },
+    {
+        "id": "95f6dc96.7761b",
+        "type": "mqtt-broker",
+        "z": "",
+        "broker": "broker.mqttdashboard.com",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    }
+]
